@@ -5,29 +5,17 @@ repo name: CrowdCompute
 description: An distrubuted computing platform. People can share their CPU and GPU power to help with tasks requiring heavy load.
 github name:  Basileus1990
 link: https://github.com/Basileus1990/CrowdCompute
-logo path: NOLOGO
 email: pawelb021@gmail.com
 -->
-
-<!-- PROJECT SHIELDS -->
-<!-- [![Contributors][contributors-shield]][contributors-url] -->
-<!-- [![Forks][forks-shield]][forks-url] -->
-<!-- [![Stargazers][stars-shield]][stars-url] -->
-<!-- [![Issues][issues-shield]][issues-url] -->
-<!-- [![MIT License][license-shield]][license-url] -->
-<!-- [![LinkedIn][linkedin-shield]][linkedin-url] -->
-
-
-
-<!-- PROJECT LOGO -->
-<!-- NOLOGO -->
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
 * [About the Project](#about-the-project)
     * [Built With](#built-with)
+    * [Architecture graph](#architecture-graph)
     * [TODO](#TODO)
+    * [Ideas](#ideas)
 * [Getting Started](#getting-started)
     * [Prerequisites](#prerequisites)
     * [Installation](#installation)
@@ -43,40 +31,35 @@ email: pawelb021@gmail.com
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-$An API written in GO for sharing files
+An distrubuted computing platform. People can share their CPU and GPU power to help with tasks requiring heavy load.
+    * Task creators can upload their tasks to the platform
+    * Task executors can contribute to the tasks through primarly the web browser, but also CLI tool or windowed application
 
 ### Built With
-% To be added
+* [GO](https://golang.org/)
+* [Typescript](https://www.typescriptlang.org/)
+* [Vue.js](https://vuejs.org/)
 
+### Architecture graph
+![Architecture graph](./docs/architecture_graph.png)
 ### TODO:
-1. Creating the file transfer API server
-    * [X] Make the server take the sent json, parse it and put (temporalily) in a map in memory
-    * [X] Create unique keys for sent data
-    * [ ] Create an option to get data from temporary db using the unique key
-    * [ ] Add the database
-    * [ ] 
-    * [ ] 
-    * [ ] Save logs to a file
-
-2. Creating the website server
-    * [ ] create basic server with basic HTML template
-    * [ ] add possibility to upload file data
-    * [ ] add possibility to get file data
-
-3. Database
-    * [ ] choose the database
-    * [ ] Implement storing the directories
-    * [ ] 
-
-4. Overall structure
-    * [ ] split the application into separate parts
-        * [X] independent API server
-        * [ ] independent website server
-        * [ ] independent database server
-
-5. CLI tool - mostly for testing but who knows, maybe it will be 
+0. Planning phase
+    * [X] Check how to do computations in the browser
+        * create sandboxed environment and run given code there
+        * In future check how to do it with GPU
+    * [ ] Check how to break big tasks into smaller ones, so they can be shared
+        * Basically the task creator will write JS code which will be executed in the user's browser
+    * [ ] Create graph of the project
+    
+1. Create a web server
+    * [ ] Create basic website UI
+    * [ ] Create basic website backend
+        * [ ] Create basic API
 
 
+### Ideas
+1. Possibly task creators could pay for the task execution. The payment would be split between the task executors.
+2. 
 
 
 <!-- GETTING STARTED -->
