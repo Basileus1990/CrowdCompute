@@ -51,10 +51,15 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
         * Basically the task creator will write JS code which will be executed in the user's browser
     * [ ] Create graph of the project
     
-1. Create a web server
-    * [ ] Create basic website UI
+1. Frontend
+    * [ ] Create basic website UI (purely functional)
+        * [ ] Part for adding new tasks
+        * [ ] Part for viewing tasks and selecting them
+        * [ ] make them call the server
+2. Backend 
     * [ ] Create basic website backend
-        * [ ] Create basic API
+        * [ ] Make API for adding tasks and add them (temporarily) to map in memory
+        * [ ] Make API for getting all tasks
 
 
 ### Ideas
