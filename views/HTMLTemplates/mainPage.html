@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrowdCompute</title>
+
+    <link rel="stylesheet" href="/views/static-files/main.css">
+    <script src="/views/static-files/taskGetter.js" defer></script>
+</head>
+
+<body>
+    <h1>Basic UI</h1>
+    <!-- Add task -->
+    <section>
+        <h2>Add task</h2>
+        <form method="post" action="/add-task">
+            <label for="taskName">Task name:</label>
+            <input type="text" id="taskName" name="taskName"><br><br>
+            <label for="taskDescription">Task description:</label>
+            <input type="text" id="taskDescription" name="taskDescription"><br><br>
+            <label for="taskAuthor">Task author:</label>
+            <input type="text" id="taskAuthor" name="taskAuthor"><br><br>
+            <label for="taskData">Task data:</label>
+            <input type="text" id="taskData" name="taskData"><br><br>
+            <label for="taskCode">Task code:</label>
+            <textarea id="taskCode" name="taskCode" rows="4" cols="50"></textarea><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </section>
+
+    <!-- task getter -->
+    <button id="task-getter">Get tasks</button>
+    <section id="task-getter-section">
+        <h2>Tasks</h2>
+        <ul id="task-list">
+        </ul>
+    </section>
+
+</body>
+
+</html>

@@ -1,17 +1,41 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"text/template"
+
+	"github.com/Basileus1990/CrowdCompute.git/taskAdder"
+	"github.com/Basileus1990/CrowdCompute.git/taskGetter"
+)
 
 // API options
 const (
-//SHARE = "/share"
+// SHARE = "/share"
 )
 
 // returns configured mutex
 func setRouting() *http.ServeMux {
 	mux := http.NewServeMux()
 
-	//mux.HandleFunc(SHARE, receiver.ShareFiles)
+	mux.HandleFunc("/", MainPage)
+	mux.HandleFunc("/views/static-files/", StaticFiles)
+	mux.HandleFunc("/add-task", taskAdder.AddTask)
+	mux.HandleFunc("/get-tasks", taskGetter.GetTasks)
 
 	return mux
+}
+
+func MainPage(w http.ResponseWriter, r *http.Request) {
+	templ, err := template.ParseFiles("./views/HTMLTemplates/mainPage.html")
+	if err != nil {
+		panic(err)
+	}
+	err = templ.Execute(w, nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func StaticFiles(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, r.URL.Path[1:])
 }

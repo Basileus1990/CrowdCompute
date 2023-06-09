@@ -47,13 +47,13 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
     * [X] Check how to do computations in the browser
         * create sandboxed environment and run given code there
         * In future check how to do it with GPU
-    * [ ] Check how to break big tasks into smaller ones, so they can be shared
+    * [X] Check how to break big tasks into smaller ones, so they can be shared
         * Basically the task creator will write JS code which will be executed in the user's browser
-    * [ ] Create graph of the project
+    * [X] Create graph of the project
     
 1. Frontend
     * [ ] Create basic website UI (purely functional)
-        * [ ] Part for adding new tasks
+        * [X] Part for adding new tasks
         * [ ] Part for viewing tasks and selecting them
         * [ ] make them call the server
 2. Backend 
