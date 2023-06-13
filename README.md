@@ -54,17 +54,28 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
 1. Frontend
     * [ ] Create basic website UI (purely functional)
         * [X] Part for adding new tasks
-        * [ ] Part for viewing tasks and selecting them
+        * [X] Part for viewing tasks and selecting them
+        * [X] executing of tasks
+        * [ ] viewing results of tasks
         * [ ] make them call the server
 2. Backend 
     * [ ] Create basic website backend
-        * [ ] Make API for adding tasks and add them (temporarily) to map in memory
+        * [X] Make API for adding tasks and add them (temporarily) to map in memory
         * [ ] Make API for getting all tasks
+        * [ ] Make API for receiving results of tasks
+        * [ ] Make API for seeing results of tasks
 
+#### First step
+    * Make it possible to add tasks, see the list of them as a user and as an author
+    * Make it possible to execute tasks as a user
+    * Make it possible to see the results of the tasks as an author
+    * Start learning about postgreSQL and how to use it with GO
 
 ### Ideas
 1. Possibly task creators could pay for the task execution. The payment would be split between the task executors.
-2. 
+2. Create an API for using the platform outside the browser
+3. Add possiblity to use other languages than JS
+4. Add possiblity to use GPU for computations
 
 
 <!-- GETTING STARTED -->
