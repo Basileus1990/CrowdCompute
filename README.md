@@ -76,6 +76,7 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
 2. Create an API for using the platform outside the browser
 3. Add possiblity to use other languages than JS
 4. Add possiblity to use GPU for computations
+5. Add possibility to use the internet for verified task creators
 
 
 <!-- GETTING STARTED -->
