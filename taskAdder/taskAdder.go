@@ -30,8 +30,20 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	database.AddTask(newTask)
-	for _, task := range database.GetAllTasks() {
+	err := database.AddTask(newTask)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Couldn't add the tast: %v\n", newTask)
+		return
+	}
+
+	fmt.Fprintf(w, "Task added")
+	tasks, err := database.GetAllTasks()
+	if err != nil {
+		fmt.Fprintf(w, "Couldn't get all tasks")
+		return
+	}
+	for _, task := range tasks {
 		fmt.Fprintf(w, "%v\n", task)
 	}
 }

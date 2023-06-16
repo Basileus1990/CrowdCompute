@@ -65,6 +65,14 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
         * [ ] Make API for receiving results of tasks
         * [ ] Make API for seeing results of tasks
 
+3. Database
+    * [ ] Create database
+        * [ ] Make it possible to add tasks to the database
+        * [ ] Make it possible to get tasks from the database
+            * [ ] Consider tasks that have the same name. Should title be primary key or something else?
+        * [ ] Make it possible to add results of tasks to the database
+        * [ ] Make it possible to get results of tasks from the database
+
 #### First step
     * Make it possible to add tasks, see the list of them as a user and as an author
     * Make it possible to execute tasks as a user

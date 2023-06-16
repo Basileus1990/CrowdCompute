@@ -1,12 +1,38 @@
 package database
 
 import (
-	"github.com/Basileus1990/CrowdCompute.git/dataStructures"
+	"database/sql"
+	"fmt"
+	"log"
+
+	_ "github.com/lib/pq"
 )
 
-// temporary
-var db map[string]dataStructures.Task
+var db *sql.DB
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = "8426" // TODO: change to env variable
+	dbname   = "crowd-compute"
+)
 
 func init() {
-	db = make(map[string]dataStructures.Task)
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+
+	var err error
+	db, err = sql.Open("postgres", psqlInfo)
+	if err != nil {
+		log.Fatal("database connection failed: ", err)
+	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal("database connection failed: ", err)
+	}
+
+	log.Println("database connection established")
 }
