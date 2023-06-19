@@ -14,11 +14,10 @@ import (
 // TODO: add the task to the database
 func AddTask(w http.ResponseWriter, r *http.Request) {
 	// print the task name
-	newTask := dataStructures.Task{
-		Name:        r.FormValue("taskName"),
+	newTask := dataStructures.TaskInfo{
+		Title:       r.FormValue("taskName"),
 		Description: r.FormValue("taskDescription"),
 		Author:      r.FormValue("taskAuthor"),
-		Data:        r.FormValue("taskData"),
 		Code:        r.FormValue("taskCode"),
 	}
 

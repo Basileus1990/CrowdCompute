@@ -1,24 +1,18 @@
 package dataStructures
 
-import "encoding/json"
-
 // Task is a struct that represents a task
 // Requrirements:
 //   - Name && Author && Code != ""
 //   - Data - a valid JSON string
-type Task struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+type TaskInfo struct {
+	Title       string `json:"name"`
 	Author      string `json:"author"`
+	Description string `json:"description"`
 	Code        string `json:"code"`
-	Data        string `json:"data"`
 }
 
-func (task Task) VerifyTask() bool {
-	if task.Name == "" || task.Author == "" || task.Code == "" {
-		return false
-	}
-	if task.Data != "" && !json.Valid([]byte(task.Data)) {
+func (task TaskInfo) VerifyTask() bool {
+	if task.Title == "" || task.Author == "" || task.Code == "" {
 		return false
 	}
 	return true

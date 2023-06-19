@@ -8,7 +8,7 @@ CREATE TABLE users (
 
 CREATE TABLE task_info (
     id            SERIAL         NOT NULL,
-    title         VARCHAR(100)   NOT NULL,
+    title         VARCHAR(100)   NOT NULL UNIQUE,
     author_id     INTEGER        NOT NULL,
     description   TEXT           NOT NULL,
     code          TEXT           NOT NULL,
