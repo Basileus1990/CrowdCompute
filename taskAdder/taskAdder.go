@@ -32,7 +32,7 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 	err := database.AddTask(newTask)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Couldn't add the tast: %v\n", newTask)
+		fmt.Fprintf(w, "Couldn't add the tast: %v\n", newTask, err)
 		return
 	}
 

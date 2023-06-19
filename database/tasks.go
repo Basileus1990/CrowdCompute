@@ -5,7 +5,7 @@ import (
 )
 
 func AddTask(task dataStructures.TaskInfo) error {
-	sqlTaskInput := `INSERT INTO tasks
+	sqlTaskInput := `INSERT INTO task_info
 					("title", "author_id", "description", "code")
 					VALUES ($1, $2, $3, $4);`
 	// gets author_id from DB
@@ -14,7 +14,7 @@ func AddTask(task dataStructures.TaskInfo) error {
 		return err
 	}
 
-	_, err = db.Exec(sqlTaskInput, task.Title, userID, task.Description, task.Code)
+	_, err = db.Exec(sqlTaskInput, task.Title, userID.ID, task.Description, task.Code)
 	if err != nil {
 		return err
 	}
@@ -22,20 +22,20 @@ func AddTask(task dataStructures.TaskInfo) error {
 	return nil
 }
 
-func GetTaskByTitle(title string) dataStructures.TaskInfo {
-	sqlGetTask := `SELECT * FROM tasks WHERE title = $1;`
+func GetTaskByTitle(title string) (dataStructures.TaskInfo, error) {
+	sqlGetTask := `SELECT * FROM task_info WHERE title = $1;`
 	var task dataStructures.TaskInfo
 	err := db.QueryRow(sqlGetTask, title).Scan(&task.Title, &task.Author, &task.Description, &task.Code)
 	if err != nil {
-		return dataStructures.TaskInfo{}
+		return dataStructures.TaskInfo{}, err
 	}
 
-	return task
+	return task, nil
 }
 
 // Results basic data about all tasks which are available for execution
 func GetAllAvailableTasksInfo() ([]dataStructures.TaskInfo, error) {
-	sqlGetAllTasks := `SELECT title, author_id, description, code FROM tasks WHERE available = TRUE;`
+	sqlGetAllTasks := `SELECT title, author_id, description, code FROM task_info;`
 	rows, err := db.Query(sqlGetAllTasks)
 	if err != nil {
 		return nil, err

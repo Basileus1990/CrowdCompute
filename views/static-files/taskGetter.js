@@ -29,6 +29,9 @@ document.getElementById('task-getter').addEventListener('click', () => {
                 let executeButton = document.createElement('button');
                 executeButton.textContent = "Execute the task";
                 executeButton.addEventListener('click', () => {
+                    if (task.hasOwnProperty('data') == false) {
+                        task.data = "";
+                    }
                     let taskResult = executeTask(task.code, task.data);
                     if (taskResult.error) {
                         alert("Error: " + taskResult.error);

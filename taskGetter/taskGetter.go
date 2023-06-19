@@ -25,7 +25,7 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 	_, err = w.Write(json)
 }
 
-func tasksToJSON(tasks []dataStructures.Task) ([]byte, error) {
+func tasksToJSON(tasks []dataStructures.TaskInfo) ([]byte, error) {
 	json, err := json.Marshal(tasks)
 	if err != nil {
 		return nil, err

@@ -67,9 +67,9 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
 
 3. Database
     * [ ] Create database
-        * [ ] Make it possible to add tasks to the database
-        * [ ] Make it possible to get tasks from the database
-            * [ ] Consider tasks that have the same name. Should title be primary key or something else?
+        * [X] Make it possible to add tasks to the database
+        * [X] Make it possible to get tasks from the database
+            * [X] Consider tasks that have the same name. Should title be primary key or something else?
         * [ ] Make it possible to add results of tasks to the database
         * [ ] Make it possible to get results of tasks from the database
 
