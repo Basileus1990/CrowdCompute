@@ -10,8 +10,8 @@ type Task struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Author      string `json:"author"`
-	Data        string `json:"data"`
 	Code        string `json:"code"`
+	Data        string `json:"data"`
 }
 
 func (task Task) VerifyTask() bool {

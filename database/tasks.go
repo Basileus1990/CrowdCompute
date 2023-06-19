@@ -1,8 +1,6 @@
 package database
 
 import (
-	"log"
-
 	"github.com/Basileus1990/CrowdCompute.git/dataStructures"
 )
 
@@ -11,7 +9,7 @@ func AddTask(task dataStructures.Task) error {
 					("title", "author_id", "description", "code")
 					VALUES ($1, $2, $3, $4);`
 	// gets author_id from DB
-	userID, err := GetUserIDByUsername(task.Author)
+	userID, err := GetUserByUsername(task.Author)
 	if err != nil {
 		return err
 	}
@@ -24,18 +22,20 @@ func AddTask(task dataStructures.Task) error {
 	return nil
 }
 
-func GetTask(title string) dataStructures.Task {
+func GetTaskByTitle(title string) dataStructures.Task {
 	sqlGetTask := `SELECT * FROM tasks WHERE title = $1;`
 	var task dataStructures.Task
 	err := db.QueryRow(sqlGetTask, title).Scan(&task.Name, &task.Author, &task.Description, &task.Code)
 	if err != nil {
 		return dataStructures.Task{}
 	}
+
 	return task
 }
 
-func GetAllTasks() ([]dataStructures.Task, error) {
-	sqlGetAllTasks := `SELECT title, author_id, description, code FROM tasks;`
+// Results basic data about all tasks which are available for execution
+func GetAllAvailableTasksInfo() ([]dataStructures.Task, error) {
+	sqlGetAllTasks := `SELECT title, author_id, description, code FROM tasks WHERE available = TRUE;`
 	rows, err := db.Query(sqlGetAllTasks)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,6 @@ func GetAllTasks() ([]dataStructures.Task, error) {
 	defer rows.Close()
 
 	var tasks []dataStructures.Task
-	log.Println(tasks)
 	for rows.Next() {
 		author_id := -1
 		var task dataStructures.Task
@@ -51,10 +50,14 @@ func GetAllTasks() ([]dataStructures.Task, error) {
 		if err != nil {
 			return nil, err
 		}
-		task.Author, err = GetUsernameByID(author_id)
+
+		// setting author username
+		author, err := GetUserByID(author_id)
 		if err != nil {
 			return nil, err
 		}
+		task.Author = author.Username
+
 		tasks = append(tasks, task)
 	}
 	return tasks, nil

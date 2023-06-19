@@ -76,3 +76,32 @@ func TestAddUser(t *testing.T) {
 		t.Fatal("Database changed state after the test where it shouldn't. Before num: ", startRowNumber, " After num: ", endRowNumber)
 	}
 }
+
+// func TestAddTasks(t *testing.T) {
+// 	sqlUserInput := `INSERT INTO "users"
+// 					("username", "password", "email")
+// 					VALUES ($1, $2, $3);`
+// 	sqlTaskInput := `INSERT INTO "users"
+// 					("title", "author_id", "description", "code")
+// 					VALUES ($1, $2, $3, $4);`
+
+// 	goodUsers := []testUser{
+// 		{"fghfhdfgfhg", "12345678", "fhnfghngfgfg@gmail.com"},
+// 		{"rjynfgnfbfsbfbfs", "12345678", "ujyhdhjufkdfghndgn@gmail.com"},
+// 		{"fgjnfjngnvfgnvdnbfb", "12345678", "ghghmcgnbcgncv@gmail.com"},
+// 	}
+// 	for _, u := range goodUsers {
+// 		_, err := db.Exec(sqlUserInput, u.username, u.password, u.email)
+// 		if err != nil {
+// 			t.Fatal("Database insertion failed: ", sqlUserInput, err)
+// 		}
+// 	}
+// 	defer deleteTestUsers(goodUsers)
+
+// 	goodTask := []dataStructures.Task{
+// 		{"title1", "fghfhdfgfhg", "description1", "code1"},
+// 		{"title2", "rjynfgnfbfsbfbfs", "description2", "code2"},
+// 		{"title3", "fgjnfjngnvfgnvdnbfb", "description3", "code3"},
+// 	}
+// 	// change DB structure
+// }

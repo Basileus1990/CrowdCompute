@@ -34,5 +34,5 @@ func init() {
 		log.Fatal("database connection failed: ", err)
 	}
 
-	log.Println("database connection established")
+	fmt.Println("<-- Database connection established -->")
 }

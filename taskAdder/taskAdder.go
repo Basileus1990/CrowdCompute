@@ -38,7 +38,7 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "Task added")
-	tasks, err := database.GetAllTasks()
+	tasks, err := database.GetAllAvailableTasksInfo()
 	if err != nil {
 		fmt.Fprintf(w, "Couldn't get all tasks")
 		return

@@ -10,7 +10,7 @@ import (
 )
 
 func GetTasks(w http.ResponseWriter, r *http.Request) {
-	tasks, err := database.GetAllTasks()
+	tasks, err := database.GetAllAvailableTasksInfo()
 	if err != nil {
 		fmt.Println(err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)

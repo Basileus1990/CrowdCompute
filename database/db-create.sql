@@ -6,18 +6,30 @@ CREATE TABLE users (
     created_at    TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE tasks (
-    id            SERIAL         PRIMARY KEY,
+CREATE TABLE task_info (
+    id            SERIAL         NOT NULL,
     title         VARCHAR(100)   NOT NULL,
     author_id     INTEGER        NOT NULL,
-    executor_id   INTEGER,
     description   TEXT           NOT NULL,
-    available     BOOLEAN        NOT NULL DEFAULT TRUE,
-    created_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     code          TEXT           NOT NULL,
-    results       TEXT,
-    data          TEXT,
+    created_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     -- img TEXT
+    PRIMARY KEY (id),
+
     FOREIGN KEY (author_id) REFERENCES users(id),
+);
+
+-- Completed tasks. DO not keep results in task table
+CREATE TABLE task_status (
+    id            SERIAL         NOT NULL,
+    task_info_id  INTEGER        NOT NULL,
+    data          TEXT           NOT NULL, -- JSON
+    results       TEXT,                    -- JSON
+    executor_id   INTEGER,
+    created_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (task_info_id),
+
+    FOREIGN KEY (task_info_id) REFERENCES task_info(id) ON DELETE CASCADE,
     FOREIGN KEY (executor_id) REFERENCES users(id)
 );

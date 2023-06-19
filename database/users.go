@@ -1,21 +1,29 @@
 package database
 
-func GetUserIDByUsername(username string) (int, error) {
-	sqlGetUserID := `SELECT id FROM users WHERE username = $1;`
-	var userID int
-	err := db.QueryRow(sqlGetUserID, username).Scan(&userID)
+import (
+	"github.com/Basileus1990/CrowdCompute.git/dataStructures"
+)
+
+func GetUserByUsername(username string) (dataStructures.User, error) {
+	sqlGetUserID := `SELECT id, email FROM users WHERE username = $1;`
+	var user dataStructures.User
+	user.Username = username
+	err := db.QueryRow(sqlGetUserID, username).Scan(&user.ID, &user.Email)
 	if err != nil {
-		return -1, err
+		return dataStructures.User{}, err
 	}
-	return userID, nil
+
+	return user, nil
 }
 
-func GetUsernameByID(id int) (string, error) {
-	sqlGetUsername := `SELECT username FROM users WHERE id = $1;`
-	var username string
-	err := db.QueryRow(sqlGetUsername, id).Scan(&username)
+func GetUserByID(id int) (dataStructures.User, error) {
+	sqlGetUsername := `SELECT username, email FROM users WHERE id = $1;`
+	var user dataStructures.User
+	user.ID = id
+	err := db.QueryRow(sqlGetUsername, id).Scan(&user.Username, &user.Email)
 	if err != nil {
-		return "", err
+		return dataStructures.User{}, err
 	}
-	return username, nil
+
+	return user, nil
 }
