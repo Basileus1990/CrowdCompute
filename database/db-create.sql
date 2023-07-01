@@ -16,20 +16,27 @@ CREATE TABLE task_info (
     -- img TEXT
     PRIMARY KEY (id),
 
-    FOREIGN KEY (author_id) REFERENCES users(id),
+    FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Completed tasks. DO not keep results in task table
-CREATE TABLE task_status (
+CREATE TABLE task (
     id            SERIAL         NOT NULL,
     task_info_id  INTEGER        NOT NULL,
     data          TEXT           NOT NULL, -- JSON
-    results       TEXT,                    -- JSON
+
+    PRIMARY KEY (id),
+
+    FOREIGN KEY (task_info_id) REFERENCES task_info(id) ON DELETE CASCADE
+);
+
+CREATE TABLE task_result (
+    id            SERIAL         NOT NULL,
+    task_id       INTEGER        NOT NULL,
     executor_id   INTEGER,
+    results       TEXT,                    -- JSON
     created_at    TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    PRIMARY KEY (task_info_id),
-
-    FOREIGN KEY (task_info_id) REFERENCES task_info(id) ON DELETE CASCADE,
+    PRIMARY KEY (id),
+    FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE,
     FOREIGN KEY (executor_id) REFERENCES users(id)
 );
