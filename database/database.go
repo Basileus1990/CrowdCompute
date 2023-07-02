@@ -1,3 +1,6 @@
+// Main file for database package
+// Responsible for connecting to the database
+
 package database
 
 import (

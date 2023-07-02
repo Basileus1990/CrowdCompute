@@ -1,4 +1,4 @@
-package taskGetter
+package taskController
 
 import (
 	"encoding/json"

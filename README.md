@@ -16,16 +16,6 @@ email: pawelb021@gmail.com
     * [Architecture graph](#architecture-graph)
     * [TODO](#TODO)
     * [Ideas](#ideas)
-* [Getting Started](#getting-started)
-    * [Prerequisites](#prerequisites)
-    * [Installation](#installation)
-* [Usage](#usage)
-* [Roadmap](#roadmap)
-* [Contributing](#contributing)
-* [License](#license)
-* [Contact](#contact)
-* [Acknowledgements](#acknowledgements)
-
 
 
 <!-- ABOUT THE PROJECT -->
@@ -37,8 +27,6 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
 
 ### Built With
 * [GO](https://golang.org/)
-* [Typescript](https://www.typescriptlang.org/)
-* [Vue.js](https://vuejs.org/)
 
 ### Architecture graph
 ![Architecture graph](./docs/architecture_graph.png)
@@ -74,61 +62,13 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
         * [ ] Make it possible to get results of tasks from the database
 
 4. Refactoring
-    * [ ] make the code structure more function oriented
+
 
 
 #### First step
-    * Make it possible to add tasks, see the list of them as a user and as an author
-    * Make it possible to execute tasks as a user
     * Make it possible to see the results of the tasks as an author
-    * Start learning about postgreSQL and how to use it with GO
-
 ### Ideas
 1. Possibly task creators could pay for the task execution. The payment would be split between the task executors.
 2. Create an API for using the platform outside the browser
 3. Add possiblity to use other languages than JS
 4. Add possiblity to use GPU for computations
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-% To be added
-
-### Prerequisites
-% To be added
-
-### Installation
-% To be added
-
-<!-- USAGE EXAMPLES -->
-## Usage
-% To be added
-
-
-<!-- ROADMAP -->
-## Roadmap
-% To be added
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-% To be added
-
-
-
-<!-- LICENSE -->
-## License
-% To be added
-
-
-
-<!-- CONTACT -->
-## Contact
-% To be added
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-% To be added

@@ -3,7 +3,6 @@ package dataStructures
 // TaskInfo is a struct that represents a task basic information
 // Requrirements:
 //   - Name && Author && Code != ""
-//   - Data - a valid JSON string
 type TaskInfo struct {
 	Title       string `json:"name"`
 	Author      string `json:"author"`
@@ -11,6 +10,7 @@ type TaskInfo struct {
 	Code        string `json:"code"`
 }
 
+// Task is a struct that represents a single task and its data
 type Task struct {
 	TaskTitle string `json:"task_title"`
 	Data      string `json:"data"`

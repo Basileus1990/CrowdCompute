@@ -4,8 +4,7 @@ import (
 	"net/http"
 	"text/template"
 
-	"github.com/Basileus1990/CrowdCompute.git/taskAdder"
-	"github.com/Basileus1990/CrowdCompute.git/taskGetter"
+	"github.com/Basileus1990/CrowdCompute.git/taskController"
 )
 
 // API options
@@ -19,8 +18,8 @@ func setRouting() *http.ServeMux {
 
 	mux.HandleFunc("/", MainPage)
 	mux.HandleFunc("/views/static-files/", StaticFiles)
-	mux.HandleFunc("/add-task", taskAdder.AddTask)
-	mux.HandleFunc("/get-tasks", taskGetter.GetTasks)
+	mux.HandleFunc("/add-task", taskController.AddTask)
+	mux.HandleFunc("/get-tasks", taskController.GetTasks)
 
 	return mux
 }

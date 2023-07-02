@@ -1,3 +1,5 @@
+// File responsible for all database operations related to tasks.
+
 package database
 
 import (

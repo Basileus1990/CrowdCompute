@@ -1,3 +1,5 @@
+// File responsible for all database operations related to users.
+
 package database
 
 import (

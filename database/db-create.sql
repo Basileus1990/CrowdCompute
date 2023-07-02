@@ -1,3 +1,6 @@
+-- This file contains SQL queries for creating tables in the database
+-- It is also schema for the database
+
 CREATE TABLE users (
     username      VARCHAR(100)   NOT NULL,
     email         VARCHAR(100)   UNIQUE NOT NULL,
