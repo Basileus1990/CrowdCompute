@@ -29,10 +29,10 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := database.AddTask(newTask)
+	err := database.AddTaskInfo(newTask)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Couldn't add the tast: %v\n", newTask, err)
+		fmt.Fprintf(w, "Couldn't add the task: %v\n%s", newTask, err)
 		return
 	}
 

@@ -61,7 +61,7 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
 2. Backend 
     * [ ] Create basic website backend
         * [X] Make API for adding tasks and add them (temporarily) to map in memory
-        * [ ] Make API for getting all tasks
+        * [X] Make API for getting all tasks
         * [ ] Make API for receiving results of tasks
         * [ ] Make API for seeing results of tasks
 
@@ -72,6 +72,10 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
             * [X] Consider tasks that have the same name. Should title be primary key or something else?
         * [ ] Make it possible to add results of tasks to the database
         * [ ] Make it possible to get results of tasks from the database
+
+4. Refactoring
+    * [ ] make the code structure more function oriented
+
 
 #### First step
     * Make it possible to add tasks, see the list of them as a user and as an author

@@ -53,6 +53,18 @@ func addTestUsers(users []testUser) {
 	}
 }
 
+func addTestTasks(tasks []dataStructures.TaskInfo) {
+	sqlTaskInput := `INSERT INTO task_info
+					("title", "author_username", "description", "code")
+					VALUES ($1, $2, $3, $4);`
+	for _, t := range tasks {
+		_, err := db.Exec(sqlTaskInput, t.Title, t.Author, t.Description, t.Code)
+		if err != nil {
+			log.Println("Error adding task: ", t.Title, err)
+		}
+	}
+}
+
 func TestAddUser(t *testing.T) {
 	sqlUserInput := `INSERT INTO "users" 
 					("username", "password", "email") 
@@ -101,10 +113,6 @@ func TestAddUser(t *testing.T) {
 }
 
 func TestAddTasksInfo(t *testing.T) {
-	sqlTaskInput := `INSERT INTO "task_info"
-					("title", "author_id", "description", "code")
-					VALUES ($1, $2, $3, $4);`
-
 	goodUsers := []testUser{
 		{"fghfhdfgfhg", "12345678", "fhnfghngfgfg@gmail.com"},
 		{"rjynfgnfbfsbfbfs", "12345678", "ujyhdhjufkdfghndgn@gmail.com"},
@@ -118,14 +126,10 @@ func TestAddTasksInfo(t *testing.T) {
 		{Title: "title2", Author: "rjynfgnfbfsbfbfs", Description: "description2", Code: "code2"},
 		{Title: "title3", Author: "fgjnfjngnvfgnvdnbfb", Description: "description3", Code: "code3"},
 	}
-	sampleUser, err := GetUserByUsername(goodUsers[0].username)
-	if err != nil {
-		t.Fatal("Error getting user: ", err)
-	}
 	for _, task := range goodTask {
-		_, err := db.Exec(sqlTaskInput, task.Title, sampleUser.ID, task.Description, task.Code)
+		err := AddTaskInfo(task)
 		if err != nil {
-			t.Fatal("Database insertion failed: ", sqlTaskInput, err)
+			t.Fatal("Database insertion failed: ", err)
 		}
 	}
 	defer deleteTestTasks(goodTask)
@@ -136,10 +140,58 @@ func TestAddTasksInfo(t *testing.T) {
 		{Title: "title2", Author: "rjynfgnfbfsbfbfs", Description: "description", Code: "code"},
 	}
 	for _, task := range badTasks {
-		_, err := db.Exec(sqlTaskInput, task.Title, sampleUser.ID, task.Description, task.Code)
+		err := AddTaskInfo(task)
 		if err == nil {
 			deleteTestTasks(badTasks)
-			t.Fatal("Database insertion should fail: ", sqlTaskInput, err)
+			t.Fatal("Database insertion should fail: ", err)
+		}
+	}
+
+}
+
+func TestAddTasks(t *testing.T) {
+
+	goodUsers := []testUser{
+		{"fghfhdfgfhg", "12345678", "fhnfghngfgfg@gmail.com"},
+		{"rjynfgnfbfsbfbfs", "12345678", "ujyhdhjufkdfghndgn@gmail.com"},
+		{"fgjnfjngnvfgnvdnbfb", "12345678", "ghghmcgnbcgncv@gmail.com"},
+	}
+	addTestUsers(goodUsers)
+	defer deleteTestUsers(goodUsers)
+	tasksInfo := []dataStructures.TaskInfo{
+		{Title: "title1", Author: "fghfhdfgfhg", Description: "description1", Code: "code1"},
+		{Title: "title2", Author: "rjynfgnfbfsbfbfs", Description: "description2", Code: "code2"},
+		{Title: "title3", Author: "fgjnfjngnvfgnvdnbfb", Description: "description3", Code: "code3"},
+	}
+	addTestTasks(tasksInfo)
+	defer deleteTestTasks(tasksInfo)
+
+	// test task adding
+	goodTask := []dataStructures.Task{
+		{TaskTitle: "title1", Data: "{\"test\": \"test\"}"},
+		{TaskTitle: "title2", Data: "{\"test\": \"test\"}"},
+		{TaskTitle: "title2", Data: "{\"test\": \"test\"}"},
+		{TaskTitle: "title2", Data: "{\"test\": \"test\"}"},
+		{TaskTitle: "title3", Data: "{\"test\": \"test\"}"},
+	}
+
+	for _, task := range goodTask {
+		err := AddTask(task)
+		if err != nil {
+			t.Fatal("Database insertion failed: ", err)
+		}
+	}
+
+	// test invalid user data
+	badTasks := []dataStructures.Task{
+		{TaskTitle: "title0", Data: "{\"test\": \"test\"}"},
+		{TaskTitle: "title2", Data: "\"test\": \"test\"}"},
+		{TaskTitle: "title", Data: "{\"test\": \"test\""},
+	}
+	for _, task := range badTasks {
+		err := AddTask(task)
+		if err == nil {
+			t.Fatal("Database insertion should fail: ", err)
 		}
 	}
 
