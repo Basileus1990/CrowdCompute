@@ -22,14 +22,15 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Task verification
-	if !newTask.VerifyTask() {
+	err := newTask.VerifyTask()
+	if err != nil {
 		// TODO: Redirect to an error page
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Invalid task")
+		fmt.Fprint(w, err.Error())
 		return
 	}
 
-	err := database.AddTaskInfo(newTask)
+	err = database.AddTaskInfo(newTask)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "Couldn't add the task: %v\n%s", newTask, err)
@@ -39,7 +40,7 @@ func AddTask(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Task added")
 	tasks, err := database.GetAllAvailableTasksInfo()
 	if err != nil {
-		fmt.Fprintf(w, "Couldn't get all tasks")
+		fmt.Fprintf(w, "Couldn't get all tasks: %v\n", err)
 		return
 	}
 	for _, task := range tasks {

@@ -3,9 +3,6 @@
 package database
 
 import (
-	"encoding/json"
-	"errors"
-
 	"github.com/Basileus1990/CrowdCompute.git/dataStructures"
 )
 
@@ -28,11 +25,20 @@ func AddTask(task dataStructures.Task) error {
 					("task_info_title", "data")
 					VALUES ($1, $2);`
 
-	if !json.Valid([]byte(task.Data)) {
-		return errors.New("invalid data in a task")
+	_, err := db.Exec(sqlTaskInput, task.TaskTitle, task.Data)
+	if err != nil {
+		return err
 	}
 
-	_, err := db.Exec(sqlTaskInput, task.TaskTitle, task.Data)
+	return nil
+}
+
+func AddResult(result dataStructures.Result) error {
+	sqlTaskInput := `INSERT INTO task_result
+					("task_id", "executor_username", "results")
+					VALUES ($1, $2, $3);`
+
+	_, err := db.Exec(sqlTaskInput, result.TaskID, result.ExecutorUsername, result.Results)
 	if err != nil {
 		return err
 	}
