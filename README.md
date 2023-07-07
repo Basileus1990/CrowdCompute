@@ -27,7 +27,6 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
 
 ### Built With
 * [GO](https://golang.org/)
-
 ### Architecture graph
 ![Architecture graph](./docs/architecture_graph.png)
 ### TODO:
@@ -61,7 +60,8 @@ An distrubuted computing platform. People can share their CPU and GPU power to h
         * [ ] Make it possible to add results of tasks to the database
         * [ ] Make it possible to get results of tasks from the database
 
-4. Refactoring
+4. User system
+    * https://medium.com/swlh/building-a-user-auth-system-with-jwt-using-golang-30892659cc0
 
 
 
