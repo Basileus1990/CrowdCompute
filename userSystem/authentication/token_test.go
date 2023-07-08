@@ -5,6 +5,9 @@ import (
 	"log"
 	"strings"
 	"testing"
+
+	"github.com/Basileus1990/CrowdCompute.git/dataStructures"
+	"github.com/Basileus1990/CrowdCompute.git/database"
 )
 
 func TestCreatingToken(t *testing.T) {
@@ -38,4 +41,52 @@ func TestCreatingToken(t *testing.T) {
 			t.Errorf("Expected username %s, got %s", username, tokenStruct.Username)
 		}
 	}
+}
+
+func TestValidatingTokens(t *testing.T) {
+	user := dataStructures.User{
+		Username: "test",
+		Email:    "test@test.test",
+	}
+	pass := "test"
+	err := database.AddUser(user, pass)
+	if err != nil {
+		t.Error(err)
+	}
+	defer database.DeleteUser(user.Username)
+
+	// check if the token is valid and try to asign a new one
+	for i := 0; i < 2; i++ {
+		token, err := GenerateToken(user.Username)
+		if err != nil {
+			t.Error(err)
+		}
+		err = database.SetAuthToken(user.Username, token)
+		if err != nil {
+			t.Error(err)
+		}
+		_, err = VerifyToken(token)
+		if err != nil {
+			t.Error(err)
+		}
+	}
+
+	// check if the token is invalid
+	notActiveToken, err := GenerateToken(user.Username)
+	if err != nil {
+		t.Error(err)
+	}
+	invalidTokens := []string{
+		"invalidddddddddddddddddddddddddddddddddddddddddddd",
+		"invalid.invaliddddddddddddddddddddddddddddddddddddd",
+		"{dsfgfafg:sadgfasf}.dsaoidgiosjuopa",
+		notActiveToken,
+	}
+	for _, token := range invalidTokens {
+		_, err := VerifyToken(token)
+		if err == nil {
+			t.Errorf("Expected error, got nil: %s", token)
+		}
+	}
+
 }

@@ -7,6 +7,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -44,13 +45,13 @@ func GenerateToken(username string) (string, error) {
 
 	signedToken := fmt.Sprintf("%s.%s", tokenJSON, sig)
 
-	// encode the token
-	encodedToken, err := encryptToken(signedToken)
+	// encrypt the token
+	encryptedToken, err := encryptToken(signedToken)
 	if err != nil {
 		return "", err
 	}
 
-	return encodedToken, nil
+	return encryptedToken, nil
 }
 
 func encryptToken(token string) (string, error) {
@@ -69,10 +70,15 @@ func encryptToken(token string) (string, error) {
 		return "", err
 	}
 
-	return string(gcm.Seal(nonce, nonce, []byte(token), nil)), nil
+	encrypted := gcm.Seal(nonce, nonce, []byte(token), nil)
+	return base64.StdEncoding.EncodeToString(encrypted), nil
 }
 
 func decryptToken(encodedToken string) (string, error) {
+	decodedFromBase64, err := base64.StdEncoding.DecodeString(encodedToken)
+	if err != nil {
+		return "", err
+	}
 	c, err := aes.NewCipher([]byte(privateEncryptionKey))
 	if err != nil {
 		return "", err
@@ -84,7 +90,7 @@ func decryptToken(encodedToken string) (string, error) {
 	}
 
 	nonceSize := gcm.NonceSize()
-	nonce, ciphertext := []byte(encodedToken)[:nonceSize], []byte(encodedToken)[nonceSize:]
+	nonce, ciphertext := []byte(decodedFromBase64)[:nonceSize], []byte(decodedFromBase64)[nonceSize:]
 	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
 		return "", err
