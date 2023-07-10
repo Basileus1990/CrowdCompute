@@ -16,18 +16,6 @@ import (
 	"github.com/Basileus1990/CrowdCompute.git/database"
 )
 
-type ErrInvalidToken struct {
-	Msg string
-}
-
-func (e *ErrInvalidToken) Error() string {
-	if e.Msg == "" {
-		return "Invalid authentication token"
-	} else {
-		return fmt.Sprintf("Invalid authentication token: %s", e.Msg)
-	}
-}
-
 // Returns the username if the token is valid
 // Returns an error if the token is invalid or expired
 func VerifyToken(token string) (string, error) {

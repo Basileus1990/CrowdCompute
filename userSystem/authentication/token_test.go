@@ -21,6 +21,18 @@ func TestCreatingToken(t *testing.T) {
 	}
 
 	for _, username := range testUsernames {
+		// adding user for test
+		user := dataStructures.User{
+			Username: username,
+			Email:    "test@test.test" + username,
+		}
+		pass := "test"
+		err := database.AddUser(user, pass)
+		if err != nil {
+			t.Error(err)
+		}
+		defer database.DeleteUser(user.Username)
+
 		token, err := GenerateToken(username)
 		if err != nil {
 			t.Error(err)

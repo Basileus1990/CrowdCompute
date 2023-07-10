@@ -59,3 +59,14 @@ func SetAuthToken(username string, token string) error {
 
 	return nil
 }
+
+func UserExists(username string) (bool, error) {
+	sqlUserExists := `SELECT EXISTS(SELECT 1 FROM users WHERE username = $1);`
+	var exists bool
+	err := db.QueryRow(sqlUserExists, username).Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
+}

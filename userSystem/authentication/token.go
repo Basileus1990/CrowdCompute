@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"io"
 	"time"
+
+	"github.com/Basileus1990/CrowdCompute.git/database"
 )
 
 // TODO: change to env variable
@@ -25,9 +27,15 @@ type Token struct {
 	Username            string `json:"username"`
 }
 
-// takes the username and generates a token
-// username has to be valid
+// Takes the username and generates an encrypted signed token.
+// Then it adds the token to the database
 func GenerateToken(username string) (string, error) {
+	// check if the user exists
+	if err := checkUser(username); err != nil {
+		return "", err
+	}
+
+	// create the token
 	token := Token{
 		fmt.Sprint(time.Now().UnixNano() + int64(tokenExpirationTime.Nanoseconds())),
 		username,
@@ -43,18 +51,26 @@ func GenerateToken(username string) (string, error) {
 		return "", err
 	}
 
+	// sign the token
 	signedToken := fmt.Sprintf("%s.%s", tokenJSON, sig)
 
-	// encrypt the token
-	encryptedToken, err := encryptToken(signedToken)
+	// encrypt the signed token
+	encryptedSigToken, err := encryptToken(signedToken)
 	if err != nil {
 		return "", err
 	}
 
-	return encryptedToken, nil
+	// updating the signed token in the database
+	err = database.SetAuthToken(username, encryptedSigToken)
+	if err != nil {
+		return "", err
+	}
+
+	return encryptedSigToken, nil
 }
 
-func encryptToken(token string) (string, error) {
+// returns an encrypted signed token encoded using base64
+func encryptToken(sigToken string) (string, error) {
 	c, err := aes.NewCipher([]byte(privateEncryptionKey))
 	if err != nil {
 		return "", err
@@ -70,12 +86,13 @@ func encryptToken(token string) (string, error) {
 		return "", err
 	}
 
-	encrypted := gcm.Seal(nonce, nonce, []byte(token), nil)
+	encrypted := gcm.Seal(nonce, nonce, []byte(sigToken), nil)
 	return base64.StdEncoding.EncodeToString(encrypted), nil
 }
 
-func decryptToken(encodedToken string) (string, error) {
-	decodedFromBase64, err := base64.StdEncoding.DecodeString(encodedToken)
+// returns a decrypted signed token decoded from base64
+func decryptToken(encodedSigToken string) (string, error) {
+	decodedFromBase64, err := base64.StdEncoding.DecodeString(encodedSigToken)
 	if err != nil {
 		return "", err
 	}
@@ -99,6 +116,7 @@ func decryptToken(encodedToken string) (string, error) {
 	return string(plaintext), nil
 }
 
+// creates a hash from the token
 func getSignature(token []byte) ([]byte, error) {
 	h := sha256.New()
 	_, err := h.Write(token)
@@ -106,4 +124,16 @@ func getSignature(token []byte) ([]byte, error) {
 		return nil, err
 	}
 	return h.Sum(nil), nil
+}
+
+// checks if the user exists
+func checkUser(username string) error {
+	exists, err := database.UserExists(username)
+	if err != nil {
+		return err
+	}
+	if !exists {
+		return &ErrInvalidTokenData{Msg: "User does not exist"}
+	}
+	return nil
 }
