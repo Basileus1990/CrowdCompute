@@ -2,18 +2,18 @@
 -- It is also schema for the database
 
 CREATE TABLE users (
-    username      VARCHAR(100)   NOT NULL,
-    email         VARCHAR(100)   UNIQUE NOT NULL,
-    password      VARCHAR(100)   NOT NULL,
-    auth_token    VARCHAR(200),
+    username      TEXT   NOT NULL,
+    email         TEXT   UNIQUE NOT NULL,
+    password      TEXT   NOT NULL,
+    auth_token    TEXT,
     created_at    TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (username)
 );
 
 CREATE TABLE task_info (
-    title               VARCHAR(100)   NOT NULL,
-    author_username     VARCHAR(100)   NOT NULL,
+    title               TEXT           NOT NULL,
+    author_username     TEXT           NOT NULL,
     description         TEXT           NOT NULL,
     code                TEXT           NOT NULL,
     created_at          TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -25,7 +25,7 @@ CREATE TABLE task_info (
 
 CREATE TABLE task (
     id                  SERIAL         NOT NULL,
-    task_info_title     VARCHAR(100)   NOT NULL,
+    task_info_title     TEXT           NOT NULL,
     data                TEXT           NOT NULL, -- JSON
 
     PRIMARY KEY (id),
@@ -36,7 +36,7 @@ CREATE TABLE task (
 CREATE TABLE task_result (
     id                  SERIAL         NOT NULL,
     task_id             INTEGER        NOT NULL,
-    executor_username   VARCHAR(100),
+    executor_username   TEXT,
     results             TEXT, -- JSON
     created_at          TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
