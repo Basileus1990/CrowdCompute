@@ -9,69 +9,61 @@ package authentication
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
 	"github.com/Basileus1990/CrowdCompute.git/database"
 )
 
-// Returns the username if the token is valid
-// Returns an error if the token is invalid or expired
-func VerifyToken(token string) (string, error) {
+// Checks if the given encrypted signed token is valid.
+//   - checks if the signature is valid
+//   - checks if the signed token has expired
+//   - checks if the given signed token is asigned to the user
+//
+// If valid, it returns the Token struct. Otherwise it returns an error.
+func VerifyToken(encToken string) (*Token, error) {
 	// decrypt the token
-	decryptedToken, err := decryptToken(token)
+	sigToken, err := decryptToken(encToken)
 	if err != nil {
-		return "", err
-	}
-	log.Println("Decrypted: ", decryptedToken)
-
-	// check if the token is valid
-	if err = validateToken(decryptedToken); err != nil {
-		return "", err
+		return nil, err
 	}
 
-	// return the username
-	username, err := getUsername(decryptedToken)
-	if err != nil {
-		return "", err
-	}
-	return username, nil
-}
-
-func validateToken(decryptedToken string) error {
-	splittedToken := strings.Split(decryptedToken, "\"}.")
-	splittedToken[0] = splittedToken[0] + "\"}"
+	// splits the signed token into the signature and the token
+	separator := "\"}."
+	splittedToken := strings.Split(sigToken, separator)
+	// adding everything except the dot back so the JSON format is not broken
+	token := splittedToken[0] + separator[:len(separator)-1]
+	signature := splittedToken[1]
 	if len(splittedToken) != 2 {
-		return &ErrInvalidToken{}
+		return nil, &ErrInvalidToken{}
 	}
 
 	// check if the signature is valid
-	if err := checkSignature(splittedToken[0], splittedToken[1]); err != nil {
-		return err
+	if err := checkSignature(token, signature); err != nil {
+		return nil, err
 	}
 
-	// create an util struct to get the expiration time
+	// create the token struct
 	var tokenStruct Token
-	err := json.Unmarshal([]byte(splittedToken[0]), &tokenStruct)
+	err = json.Unmarshal([]byte(token), &tokenStruct)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// check if the token is expired
 	if err := checkExpiration(tokenStruct.ExpirationTimeStamp); err != nil {
-		return err
+		return nil, err
 	}
 
 	// check if the token is asigned to the user
-	if err := checkUserAsignedToken(tokenStruct.Username, decryptedToken); err != nil {
-		return err
+	if err := checkUserAsignedToken(tokenStruct.Username, sigToken); err != nil {
+		return nil, err
 	}
 
-	return nil
+	return &tokenStruct, nil
 }
 
-// Returns an error if provided the token is not asigned to the user
+// Returns an error if provided the token is not asigned to the user (is in the database)
 func checkUserAsignedToken(username string, token string) error {
 	// get the token from the database
 	dbToken, err := database.GetAuthToken(username)
@@ -83,9 +75,6 @@ func checkUserAsignedToken(username string, token string) error {
 		return err
 	}
 
-	log.Println(string(dbToken))
-	log.Println(token + "\n")
-
 	// check if the token is the same
 	if string(dbToken) != token {
 		return &ErrInvalidToken{Msg: "Asigned token is not the same as the one provided"}
@@ -93,6 +82,8 @@ func checkUserAsignedToken(username string, token string) error {
 	return nil
 }
 
+// Generates a new signature from given token and compares it to the given signature
+// Returns an error if the signatures are not the same
 func checkSignature(token string, signature string) error {
 	sig, err := getSignature([]byte(token))
 	if err != nil {
@@ -115,15 +106,4 @@ func checkExpiration(tokenExp string) error {
 		return &ErrInvalidToken{Msg: "Token has expired"}
 	}
 	return nil
-}
-
-func getUsername(token string) (string, error) {
-	splittedToken := strings.Split(token, "\"}.")
-	splittedToken[0] = splittedToken[0] + "\"}"
-	var tokenStruct Token
-	err := json.Unmarshal([]byte(splittedToken[0]), &tokenStruct)
-	if err != nil {
-		return "", err
-	}
-	return tokenStruct.Username, nil
 }

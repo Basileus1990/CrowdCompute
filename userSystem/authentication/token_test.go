@@ -2,7 +2,6 @@ package authentication
 
 import (
 	"encoding/json"
-	"log"
 	"strings"
 	"testing"
 
@@ -16,7 +15,7 @@ func TestCreatingToken(t *testing.T) {
 		"test1",
 		"lizsdufhioioyhfpoih",
 		"nxuP5BVnSrqu9OwuD7vSRdSjZBP1cckB",
-		"cb1I8PyfyW1ggfqipwIHcghkMsjciOxi!123$5tTT$T$ó",
+		"cbdfg1I8PyfyW1ggpwIHcghkMsjciOxi!123ijoij",
 		"Y4QJQz2Ln5o3wahSVijcQyYRg7OLryOh",
 	}
 
@@ -29,17 +28,17 @@ func TestCreatingToken(t *testing.T) {
 		pass := "test"
 		err := database.AddUser(user, pass)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		defer database.DeleteUser(user.Username)
 
 		token, err := GenerateToken(username)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		decToken, err := decryptToken(token)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 
 		// check if the username is the same after decryption
@@ -47,10 +46,10 @@ func TestCreatingToken(t *testing.T) {
 		var tokenStruct Token
 		err = json.Unmarshal([]byte(jsonToken), &tokenStruct)
 		if err != nil {
-			log.Fatal(err)
+			t.Fatal(err)
 		}
 		if tokenStruct.Username != username {
-			t.Errorf("Expected username %s, got %s", username, tokenStruct.Username)
+			t.Fatalf("Expected username %s, got %s", username, tokenStruct.Username)
 		}
 	}
 }
@@ -63,7 +62,7 @@ func TestValidatingTokens(t *testing.T) {
 	pass := "test"
 	err := database.AddUser(user, pass)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	defer database.DeleteUser(user.Username)
 
@@ -71,22 +70,27 @@ func TestValidatingTokens(t *testing.T) {
 	for i := 0; i < 2; i++ {
 		token, err := GenerateToken(user.Username)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		err = database.SetAuthToken(user.Username, token)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
-		_, err = VerifyToken(token)
+		tokenStruct, err := VerifyToken(token)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
+		}
+
+		// check if the token has good username
+		if tokenStruct.Username != user.Username {
+			t.Fatalf("Expected username %s, got %s", user.Username, tokenStruct.Username)
 		}
 	}
 
 	// check if the token is invalid
 	notActiveToken, err := GenerateToken(user.Username)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 	invalidTokens := []string{
 		"invalidddddddddddddddddddddddddddddddddddddddddddd",
@@ -97,7 +101,7 @@ func TestValidatingTokens(t *testing.T) {
 	for _, token := range invalidTokens {
 		_, err := VerifyToken(token)
 		if err == nil {
-			t.Errorf("Expected error, got nil: %s", token)
+			t.Fatalf("Expected error, got nil: %s", token)
 		}
 	}
 

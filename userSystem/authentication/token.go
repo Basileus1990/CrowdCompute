@@ -28,7 +28,7 @@ type Token struct {
 }
 
 // Takes the username and generates an encrypted signed token.
-// Then it adds the token to the database
+//   - Generated tokens have to be added to the database.
 func GenerateToken(username string) (string, error) {
 	// check if the user exists
 	if err := checkUser(username); err != nil {
@@ -56,12 +56,6 @@ func GenerateToken(username string) (string, error) {
 
 	// encrypt the signed token
 	encryptedSigToken, err := encryptToken(signedToken)
-	if err != nil {
-		return "", err
-	}
-
-	// updating the signed token in the database
-	err = database.SetAuthToken(username, encryptedSigToken)
 	if err != nil {
 		return "", err
 	}
@@ -107,7 +101,7 @@ func decryptToken(encodedSigToken string) (string, error) {
 	}
 
 	nonceSize := gcm.NonceSize()
-	nonce, ciphertext := []byte(decodedFromBase64)[:nonceSize], []byte(decodedFromBase64)[nonceSize:]
+	nonce, ciphertext := decodedFromBase64[:nonceSize], decodedFromBase64[nonceSize:]
 	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
 	if err != nil {
 		return "", err
