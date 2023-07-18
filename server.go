@@ -11,7 +11,14 @@ func main() {
 	fmt.Println("<---- Starting the server ---->")
 	server := http.Server{
 		Addr:    ":8080",
-		Handler: mux,
+		Handler: wrapper(mux),
 	}
 	server.ListenAndServe()
+}
+
+func wrapper(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		h.ServeHTTP(w, r)
+	})
 }
