@@ -1,4 +1,8 @@
-package usersystem
+// File responsible for:
+//   - checking the user credentials
+//   - hashing the password
+
+package user
 
 import (
 	"github.com/Basileus1990/CrowdCompute.git/database"

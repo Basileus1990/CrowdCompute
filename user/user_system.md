@@ -6,9 +6,8 @@
 * Token is generated through Login/Register API call
 
 ## TODO
-* [ ] Make this package responsible for all user actions
-* [ ] Add a way to renew token
 * [ ] Add a way to register
+* [ ] Add tests for API calls
 
 ### Notes
     * Frontend has to send a request to renew the token every n minutes

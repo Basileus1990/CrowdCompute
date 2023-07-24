@@ -1,11 +1,11 @@
-package usersystem
+package user
 
 import (
 	"net/http"
 	"testing"
 	"time"
 
-	"github.com/Basileus1990/CrowdCompute.git/user_system/user_token"
+	"github.com/Basileus1990/CrowdCompute.git/user/user_token"
 	utilitytest "github.com/Basileus1990/CrowdCompute.git/utility_test"
 )
 

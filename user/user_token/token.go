@@ -51,26 +51,26 @@ func RenewToken(tokenString string) (string, error) {
 //   - checks if the token is valid
 //   - expiration is checked by JWT package
 //
-// If is not valid or has expired returns an error
-func UnpackToken(tokenString string) (*UserToken, error) {
+// If is not valid or has expired returns an ErrInvalidToken error
+func UnpackToken(tokenString string) (UserToken, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(privateSecredKey), nil
 	})
 	if err != nil {
-		return nil, err
+		return UserToken{}, err
 	}
 	if !token.Valid {
-		return nil, &ErrInvalidToken{}
+		return UserToken{}, &ErrInvalidToken{}
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, &ErrInvalidToken{}
+		return UserToken{}, &ErrInvalidToken{}
 	}
 
 	tokenStruct := UserToken{
 		User: claims["user"].(string),
 	}
 
-	return &tokenStruct, nil
+	return tokenStruct, nil
 }
