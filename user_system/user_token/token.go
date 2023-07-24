@@ -1,6 +1,6 @@
 // File used to generate tokens
 
-package authentication
+package user_token
 
 import (
 	"time"
@@ -13,7 +13,7 @@ const privateSecredKey = "nx/P5.,nSrqu9Owu:7vSRdSjZBP1cck!"
 
 // For how long the token is valid in minutes
 // TODO: change to config file
-const tokenExpirationTime = 15 * time.Minute
+const TokenExpirationTime = 15 * time.Minute
 
 type UserToken struct {
 	User string `json:"user"`
@@ -25,7 +25,7 @@ type UserToken struct {
 //   - exp:  expiration time
 func GenerateToken(username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"exp":  time.Now().UTC().Add(tokenExpirationTime).Unix(),
+		"exp":  time.Now().UTC().Add(TokenExpirationTime).Unix(),
 		"user": username,
 	})
 
@@ -35,6 +35,16 @@ func GenerateToken(username string) (string, error) {
 	}
 
 	return tokenString, nil
+}
+
+// Takes the token string and generates a new token with the same username but extended expiration time
+func RenewToken(tokenString string) (string, error) {
+	token, err := UnpackToken(tokenString)
+	if err != nil {
+		return "", err
+	}
+
+	return GenerateToken(token.User)
 }
 
 // Unpacks the token and returns the UserToken struct

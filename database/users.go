@@ -39,27 +39,6 @@ func DeleteUser(username string) error {
 	return nil
 }
 
-func GetAuthToken(username string) (string, error) {
-	sqlGetAuthToken := `SELECT auth_token FROM users WHERE username = $1;`
-	var token string
-	err := db.QueryRow(sqlGetAuthToken, username).Scan(&token)
-	if err != nil {
-		return "", err
-	}
-
-	return token, nil
-}
-
-func SetAuthToken(username string, token string) error {
-	sqlSetAuthToken := `UPDATE users SET auth_token = $1 WHERE username = $2;`
-	_, err := db.Exec(sqlSetAuthToken, token, username)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func UserExists(username string) (bool, error) {
 	sqlUserExists := `SELECT EXISTS(SELECT 1 FROM users WHERE username = $1);`
 	var exists bool
@@ -69,4 +48,26 @@ func UserExists(username string) (bool, error) {
 	}
 
 	return exists, nil
+}
+
+func GetPasswordByLogin(login string) (string, error) {
+	sqlGetPassword := `SELECT password FROM users WHERE username = $1 OR email = $1;`
+	var password string
+	err := db.QueryRow(sqlGetPassword, login).Scan(&password)
+	if err != nil {
+		return "", err
+	}
+
+	return password, nil
+}
+
+func GetUserByLogin(login string) (dataStructures.User, error) {
+	sqlGetUser := `SELECT username, email FROM users WHERE username = $1 OR email = $1;`
+	var user dataStructures.User
+	err := db.QueryRow(sqlGetUser, login).Scan(&user.Username, &user.Email)
+	if err != nil {
+		return dataStructures.User{}, err
+	}
+
+	return user, nil
 }

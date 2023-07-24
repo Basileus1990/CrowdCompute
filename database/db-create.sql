@@ -5,7 +5,6 @@ CREATE TABLE users (
     username      TEXT   NOT NULL,
     email         TEXT   UNIQUE NOT NULL,
     password      TEXT   NOT NULL,
-    auth_token    TEXT,
     created_at    TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (username)

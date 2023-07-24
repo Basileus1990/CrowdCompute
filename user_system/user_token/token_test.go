@@ -1,28 +1,16 @@
-package authentication
+package user_token
 
 import (
-	"math/rand"
 	"testing"
+
+	utilityTest "github.com/Basileus1990/CrowdCompute.git/utility_test"
 )
-
-func generateRandomUsername() string {
-	length := rand.Intn(1000) + 1
-	ran_str := make([]byte, length)
-
-	const space int = 32
-	const tilde int = 126
-	for i := 0; i < length; i++ {
-		ran_str[i] = byte(space + rand.Intn(tilde-space))
-	}
-
-	return string(ran_str)
-}
 
 const numberOfChecks = 100
 
 func TestCreatingToken(t *testing.T) {
 	for i := 0; i < numberOfChecks; i++ {
-		username := generateRandomUsername()
+		username := utilityTest.GenerateRandomString(1000)
 		_, err := GenerateToken(username)
 		if err != nil {
 			t.Fatal(err)
@@ -32,7 +20,7 @@ func TestCreatingToken(t *testing.T) {
 
 func TestValidatingTokens(t *testing.T) {
 	for i := 0; i < numberOfChecks; i++ {
-		username := generateRandomUsername()
+		username := utilityTest.GenerateRandomString(1000)
 		token, err := GenerateToken(username)
 		if err != nil {
 			t.Fatal(err)

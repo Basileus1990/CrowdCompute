@@ -112,30 +112,6 @@ func TestAddUser(t *testing.T) {
 	}
 }
 
-func TestAddToken(t *testing.T) {
-	goodUsers := []testUser{
-		{"fghfhdfgfhg", "12345678", "fhnfghngfgfg@gmail.com"},
-		{"rjynfgnfbfsbfbfs", "12345678", "ujyhdhjufkdfghndgn@gmail.com"},
-		{"fgjnfjngnvfgnvdnbfb", "12345678", "ghghmcgnbcgncv@gmail.com"},
-	}
-	addTestUsers(goodUsers)
-	defer deleteTestUsers(goodUsers)
-
-	tokens := []string{
-		"token1",
-		"token2",
-		"toksadgfdsaadefsfdsaen3",
-	}
-	for j := 0; j < 1; j++ {
-		for _, token := range tokens {
-			err := SetAuthToken(goodUsers[0].username, token)
-			if err != nil {
-				t.Fatal("Error adding token: ", err)
-			}
-		}
-	}
-}
-
 func TestAddTasksInfo(t *testing.T) {
 	goodUsers := []testUser{
 		{"fghfhdfgfhg", "12345678", "fhnfghngfgfg@gmail.com"},

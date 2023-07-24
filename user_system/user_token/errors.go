@@ -1,4 +1,4 @@
-package authentication
+package user_token
 
 import "fmt"
 
